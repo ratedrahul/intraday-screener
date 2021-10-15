@@ -22,9 +22,10 @@ from functools import partial
 
 window= Tk()
 window.geometry("1900x950+0+5")
-window.title("Rated Stock screener")
+window.title("Rinku bhai Stock screener")
 window.configure(bg="#8B008B")
 window.wm_iconbitmap('D:\\rated screener\\Auto wala.ico')
+
 header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
 slideword = ""
@@ -285,11 +286,10 @@ latest_file = os.listdir()[-1][:10]+'  NSE'
 dates = datetime.date.today()
 label_class_3 = Label(window,text=f'Today : {dates}',font=("arial 20 bold"),bg="#8B008B")
 label_class_3.place(x=1450,y=0)
-label_class_4 = Label(window,text="Last Trading Day",font=("arial 17 bold"),bg="#8B008B")
-# label_class_4 = Label(window,text="DATA AVAILABLE",font=("arial 17 bold"),bg="#8B008B")
+label_class_4 = Label(window,text="DATA AVAILABLE",font=("arial 17 bold"),bg="#8B008B")
 label_class_4.place(x=1480,y=50)
-label_class_5 = Label(window,text=latest_file,font=("arial 15 normal"),bg="#8B008B", fg = 'black')
-label_class_5.place(x=1500,y=90) 
+label_class_5 = Label(window,text=latest_file,font=("arial 20 bold"),bg="#8B008B")
+label_class_5.place(x=1500,y=100) 
 # N2 = ['ACC', 'ABBOTINDIA', 'ADANIGREEN', 'ADANIPORTS', 'ADANITRANS', 'ALKEM','ULTRACEMCO', 'UBL', 'MCDOWELL-N', 'WIPRO','ZEEL','NCC','ye','dfs','dasf','dasfdasf']
 #############################################################################################################
 
@@ -1678,35 +1678,124 @@ def stock_alert(stock_list = NIFTY102):
 ######################################################################################################################3
 LTRADE.config(command = stock_alert)
 
-################# Engulf Breakout     ###############################################################################
 ml = eng_all()
-def to_krna():
-    threading.Thread(target=look_for,args = (ml,)).start()
+################# Engulf Breakout     ###############################################################################
+###################################################################################################################
+###################################################################################################################
+engulf_list = []
+
+def engulf_scan(stock_name = 'DRREDDY',interval = 5):
+    global engulf_list
+    All_high = []
+    All_low = []
+    exec(f"dfl_{stock_name} = stock('{stock_name}')")
+    exec(f"All_high.append(dfl_{stock_name}.loc[0][-2])")
+    exec(f"All_low.append(dfl_{stock_name}.loc[0][-3])")
+    count=0
+    nls = []
+    new_high_list = []
+    for x in All_high[0]:
+        nls.append(x)
+        count+=1
+        if count == interval:
+            count = 0
+
+            if None in nls:
+                total_none = nls.count(None)
+                for i in range(total_none):
+                    try:
+                        nls[nls.index(None)] = nls[nls.index(None)-1]
+                    except Exception as e:
+                        print('all high wala ',e)
+                        nls[nls.index(None)] = nls[nls.index(None)+1]
+            new_high_list.append(nls)
+            nls = []
+    count1=0
+    lexi = []
+    new_low_list = []
+    for x in All_low[0]:
+        lexi.append(x)
+        count1+=1
+        if count1 == interval:
+            count1 = 0
+            if None in lexi:
+                total_n = lexi.count(None)
+                for i in range(total_n):
+                    try:
+                        lexi[lexi.index(None)] = lexi[lexi.index(None)-1]
+                    except Exception as e:
+                        print('All low wala ',e)
+                        lexi[lexi.index(None)] = lexi[lexi.index(None)+1]
+            new_low_list.append(lexi)
+            lexi = []
+    try:
+
+        max1 = max(new_high_list[-1])
+        max2 = max(new_high_list[-2])
+        min1 = min(new_low_list[-1])
+        min2 = min(new_low_list[-2])
+    except Exception as e:
+        # print('last wale me ',e)
+        return
+    print(max1,max2)
+    print(min1,min2)
+    if max1>max2:
+        if min1<min2:
+            print(stock_name)
+            engulf_list.append(stock_name)
+
+    
+# for i in NIFTY102:
+#     engulf_scan(i,15)
+
+###################################################################################################################
+###################################################################################################################
+def to_krna(interval = 15):
+    # threading.Thread(target=look_for,args = (ml,)).start()
+    # engulf_scan(stock_name = 'DRREDDY',interval = 5)
+    for i in NIFTY102:
+        # threading.Thread(target=engulf_scan,args = (i,15)).start()
+        engulf_scan(i,interval)
+    print(engulf_list)
+# Profit_button = Button(window, text="30 min", font=("arial 12 bold"),bg= 'gray',fg= 'white',command = partial(bullish_min_scan,30))
+# Profit_button.place(x=1500, y=420)
+
 # print('here ml is ',ml)
 # Profit_button = Button(window, text="Engulf br", font=("arial 15 bold"),bg= '#00FFFF',fg= 'black',command = partial(look_for,ml))
 # Profit_button = Button(window, text="Engulf br", font=("arial 15 bold"),bg= '#00FFFF',fg= 'black',command = threading.Thread(target=look_for,args = (ml,)).start())
 # Profit_button = Button(window, text="Engulf br", font=("arial 15 bold"),bg= '#00FFFF',fg= 'black',command = threading.Thread(target=look_for,args = (ml,)).run())
 Profit_button = Button(window, text="Engulf br", font=("arial 15 bold"),bg= '#00FFFF',fg= 'black',command = to_krna)
-Profit_button.place(x=680, y=380)
+Profit_button.place(x=350, y=320)
+Profit_button = Button(window, text="15 min", font=("arial 12 bold"),bg= 'blue',fg= 'white',command = partial(to_krna,15))
+Profit_button.place(x=550, y=320)
+Profit_button = Button(window, text="30 min", font=("arial 12 bold"),bg= 'blue',fg= 'white',command = partial(to_krna,30))
+Profit_button.place(x=650, y=320)
+Profit_button = Button(window, text="60 min", font=("arial 12 bold"),bg= 'blue',fg= 'white',command = partial(to_krna,60))
+Profit_button.place(x=750, y=320)
+# Profit_button = Button(window, text="15", font=("arial 15 bold"),bg= '#00FFFF',fg= 'black',command = to_krna)
+# Profit_button.place(x=350, y=320)
+# Profit_button = Button(window, text="Engulf br", font=("arial 15 bold"),bg= '#00FFFF',fg= 'black',command = to_krna)
+# Profit_button.place(x=350, y=320)
+Profit_button = Button(window, text="Engulf br", font=("arial 15 bold"),bg= '#00FFFF',fg= 'black',command = to_krna)
+Profit_button.place(x=350, y=320)
 Profit_button = Button(window, text="Scan Price", font=("arial 15 bold"),bg= '#FFA0CB',fg= 'black',command = scan_price)
 Profit_button.place(x=1250, y=300)
 
-
 #################################################################################################
+
 Profit_button = Button(window, text="pDay High Low", font=("arial 15 bold"),bg= '#00FFFF',fg= 'black',command = partial(pday_high,Bullish = True, Bearish = True))
 Profit_button.place(x=350, y=380)
 Profit_button = Button(window, text="Bullish ", font=("arial 8 bold"),bg= 'green',command = partial(pday_high,Bearish = False,Bullish = True))
 Profit_button.place(x=590, y=380)
 Profit_button = Button(window, text="Bearish", font=("arial 8 bold"),bg= '#990000',command = partial(pday_high,Bullish = False,Bearish = True))
 Profit_button.place(x=590, y=410)
-
 Profit_button = Button(window, text="Global Mkt&ADR", font=("arial 15 bold"),bg= '#0044FF',fg= 'white',command = adr_global_data)
 Profit_button.place(x=350, y=450)
-
 exit_button = Button(window, text="E\nX\nI\nT", font=("arial 15 bold"),fg="green",bg='red',width=2,height = 4,command=window.destroy)
 exit_button.place(x=1850, y=20)
 
-#############################################################################################################
+############################################################################################################################
+############################################################################################################################
 # on_completed=lambda: self.root.after(5, on_task_done), 
 
 # Profit_button = Label(window, text="Breakout", font=("arial 21 bold"),bg= '#AAAAFF',fg= 'black')
@@ -1721,4 +1810,5 @@ exit_button.place(x=1850, y=20)
 # Profit_button = Button(window, text="50", font=("arial 15 bold"),bg= '#00FFFF',fg= 'black',command = threading.Thread(target=close_to_breakout,args = (50,)))
 # Profit_button.place(x=1260, y=280)
 
-################################################################################################
+####################################################################################################################
+####################################################################################################################
