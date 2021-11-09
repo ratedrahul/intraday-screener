@@ -1,5 +1,6 @@
 # import os
 from tkinter import*
+header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
 def adr_global_data():
 
@@ -7,7 +8,7 @@ def adr_global_data():
 	import requests
 	from bs4 import BeautifulSoup
 	window_adr = Tk() 
-	window_adr.geometry('2000x980')
+	window_adr.geometry('2000x980+0+0')
 	window_adr.config(bg = "#8B008B")
 	window_adr.title('Global Data')
 	f1 = Frame(window_adr,bg = 'black')
@@ -30,7 +31,7 @@ def adr_global_data():
 			# url = f'https://www.nseindia.com/option-chain?symbolCode=-10006&symbol=NIFTY&symbol=NIFTY&instrument=-&date=-&segmentLink=17&symbolCount=2&segmentLink=17'
 			# try:
 
-			page = requests.get(url)
+			page = requests.get(url,headers = header)
 
 			# print('yes fine')
 			# print(page)
@@ -44,6 +45,7 @@ def adr_global_data():
 				d_fo = i.text
 				liss.append(d_fo)
 
+			# print(liss)
 			# for i in soup.find_all(class_="robo_medium"):
 			# 	print(i.text)
 			glb = []
@@ -114,28 +116,36 @@ def adr_global_data():
 
 
 			SHANGHAI_COMPOSITE = glb[0][glb[0].index('Shanghai Composite'):]
-			GB_Market = [SGX_Nifty,Nasdaq,DAX,NIKKEI225,Hang_Seng,FTSE,CAC,Taiwan_weighted, KOSPI,JAKARTA_COMPOSITE,SHANGHAI_COMPOSITE, Straits_Times]
+			# GB_Market = [SGX_Nifty,Nasdaq,DAX,NIKKEI225,Hang_Seng,FTSE,CAC,Taiwan_weighted, KOSPI,JAKARTA_COMPOSITE,SHANGHAI_COMPOSITE, Straits_Times]
+			GB_Market = [SGX_Nifty,NIKKEI225,KOSPI,Taiwan_weighted,JAKARTA_COMPOSITE,Straits_Times,Hang_Seng,SHANGHAI_COMPOSITE,DAX,CAC,FTSE,Nasdaq]
 			# Commodity \nPrice \nChange \n% Chg 
-			GOLD = liss[0][liss[0].index('GOLD'):liss[0].index('SILVER')]
-			SILVER = liss[0][liss[0].index('SILVER'):liss[0].index('COTTON')]
-			COTTON = liss[0][liss[0].index('COTTON'):liss[0].index('CRUDEOIL')]
-			CRUDEOIL = liss[0][liss[0].index('CRUDEOIL'):liss[0].index('NATURALGAS')]
-			NATURALGAS = liss[0][liss[0].index('NATURALGAS'):liss[0].index('ALUMINIUM')]
-			ALUMINIUM = liss[0][liss[0].index('ALUMINIUM'):]
-			Commodity_list = [GOLD, SILVER, COTTON, CRUDEOIL, NATURALGAS, ALUMINIUM]
+			# GOLD = liss[0][liss[0].index('GOLD'):liss[0].index('SILVER')]
+			# SILVER = liss[0][liss[0].index('SILVER'):liss[0].index('COTTON')]
+			# COTTON = liss[0][liss[0].index('COTTON'):liss[0].index('CRUDEOIL')]
+			# CRUDEOIL = liss[0][liss[0].index('CRUDEOIL'):liss[0].index('NATURALGAS')]
+			# NATURALGAS = liss[0][liss[0].index('NATURALGAS'):liss[0].index('ALUMINIUM')]
+			# ALUMINIUM = liss[0][liss[0].index('ALUMINIUM'):]
+			GOLD = liss[1][liss[1].index('GOLD'):liss[1].index('SILVER')]
+			# print('ye gold ',GOLD)
+			SILVER = liss[1][liss[1].index('SILVER'):liss[1].index('COTTON')]
+			COTTON = liss[1][liss[1].index('COTTON'):liss[1].index('view more')]
+			# CRUDEOIL = liss[1][liss[1].index('CRUDEOIL'):liss[1].index('NATURALGAS')]
+			# NATURALGAS = liss[1][liss[1].index('NATURALGAS'):liss[1].index('ALUMINIUM')]
+			# ALUMINIUM = liss[1][liss[1].index('ALUMINIUM'):]
+			Commodity_list = [GOLD, SILVER, COTTON]
 			#########################
 			##### ADR#########################
 			# \n\n\n\n\nCompany \nClose Price ($) \nChange \n% Chg 
-			Axis = liss[1][liss[1].index('Axis'):liss[1].index('Azure')]
-			Azure_Power_Global = liss[1][liss[1].index('Azure'):liss[1].index('Dr')]
-			Dr_Reddy_ = liss[1][liss[1].index('Dr'):liss[1].index('Eros')]
-			HDFC_BANK = liss[1][liss[1].index('HDFC'):liss[1].index('ICICI'):]
-			ICICI_BANK = liss[1][liss[1].index('ICICI'):liss[1].index('Infosys')]
-			Infosys = liss[1][liss[1].index('Infosys'):liss[1].index('MakeMyTrip')]
-			TataMotor = liss[1][liss[1].index('TATA MOTOR'):liss[1].index('Vedanta')]
-			Vedanta = liss[1][liss[1].index('Vedanta'):liss[1].index('Wipro')]
-			Wipro = liss[1][liss[1].index('Wipro'):liss[1].index('WNS')]
-			SIFYTECH = liss[1][liss[1].index('SIFY'):liss[1].index('TATA')]
+			Axis = liss[2][liss[2].index('Axis'):liss[2].index('Azure')]
+			Azure_Power_Global = liss[2][liss[2].index('Azure'):liss[2].index('Dr')]
+			Dr_Reddy_ = liss[2][liss[2].index('Dr'):liss[2].index('Eros')]
+			HDFC_BANK = liss[2][liss[2].index('HDFC'):liss[2].index('ICICI'):]
+			ICICI_BANK = liss[2][liss[2].index('ICICI'):liss[2].index('Infosys')]
+			Infosys = liss[2][liss[2].index('Infosys'):liss[2].index('MakeMyTrip')]
+			TataMotor = liss[2][liss[2].index('TATA MOTOR'):liss[2].index('Vedanta')]
+			Vedanta = liss[2][liss[2].index('Vedanta'):liss[2].index('Wipro')]
+			Wipro = liss[2][liss[2].index('Wipro'):liss[2].index('WNS')]
+			SIFYTECH = liss[2][liss[2].index('SIFY'):liss[2].index('TATA')]
 			ADR_list = [HDFC_BANK, ICICI_BANK, Axis, Dr_Reddy_,Vedanta, TataMotor, Infosys,Wipro,SIFYTECH]
 			######################### 
 			######################### 
@@ -157,7 +167,7 @@ def adr_global_data():
 				# print(len(fa))
 				# fa = [x for x in fa if fa!='']
 				return ta 
-			print(r' nGlobal Indices\n\n\n\n\nName\nCurrent Value\nChange\n            %Change\n\n%Change\nOpen\n            Prev.Close\n\nHigh\n            Low\nLow\nPrev.Close\n5 DAY Perf')
+			# print(r' nGlobal Indices\n\n\n\n\nName\nCurrent Value\nChange\n            %Change\n\n%Change\nOpen\n            Prev.Close\n\nHigh\n            Low\nLow\nPrev.Close\n5 DAY Perf')
 			# print(co(Hang_Seng))
 			# print(co(DAX))
 			# print(value)
@@ -176,14 +186,14 @@ def adr_global_data():
 				# gb_list.remove
 				# print(len)
 
-			print(r'# \n\n\n\n\nCompany \nClose Price ($) \nChange \n% Chg ')
+			# print(r'# \n\n\n\n\nCompany \nClose Price ($) \nChange \n% Chg ')
 			adr_t = []
 			for i in ADR_list:
 				p =(co(i))
 				p[-1] = p[-1]+ ' %'
 				adr_t.append(p)
 
-			print(r'# Commodity \nPrice \nChange \n% Chg ')
+			# print(r'# Commodity \nPrice \nChange \n% Chg ')
 			comm = []
 			for i in Commodity_list:
 				hihi = (co(i))
@@ -204,7 +214,7 @@ def adr_global_data():
 			# find total number of rows and 
 			# columns in list 
 			def table_c(lst):
-			  print('yo')
+			  # print('yo')
 			  if lst == adr_t:
 			  	li = ['Company','Close Price($)','Change','% Chg ']
 			  	# print('final lst is ',lst)
@@ -254,7 +264,7 @@ def adr_global_data():
 
 			  # window_adr.mainloop()  
 			def table_c2(lst,window,fo):
-			  print('yo')
+			  # print('yo')
 			  if lst == adr_t:
 			  	li = ['Company','Close Price($)','Change','% Chg ']
 			  	# print('final lst is ',lst)
@@ -329,3 +339,4 @@ def adr_global_data():
 	exit_button.place(x=1480, y=0)
 			# print(gb_list)
 		# adr_global_data()
+# adr_global_data()
