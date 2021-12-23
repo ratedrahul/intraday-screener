@@ -88,6 +88,7 @@ day_list = os.listdir()
 for i in day_list[-1:-3:-1]:
     i = '"'+i+'"'
     # print('doing for count',co unt)
+    # try this if not works exec(f"df = pd.read_csv('{i}', names = ['symbol','date','open','high','low','close','volume'],index_col=0)")
     exec((f'df{count}=pd.read_csv({i})'))
     exec((f"df{count}.columns = ['Symbol','Date','Open','High','Low','Close','Volume']"))
     exec(f'df{count}=df{count}.set_index(df{count}["Symbol"])')
